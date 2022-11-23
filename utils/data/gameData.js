@@ -21,7 +21,7 @@ const createGame = (game) => new Promise((resolve, reject) => {
 });
 
 const getGameTypes = () => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/gametype`)
+  fetch(`${clientCredentials.databaseURL}/gametypes`)
     .then((response) => response.json())
     .then(resolve)
     .catch(reject);

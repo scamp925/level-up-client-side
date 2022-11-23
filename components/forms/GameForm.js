@@ -21,11 +21,15 @@ const GameForm = ({ user }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // TODO: Get the game types, then set the state
+    getGameTypes().then((gameTypeArray) => setGameTypes(gameTypeArray));
   }, []);
 
   const handleChange = (e) => {
-    // TODO: Complete the onChange function
+    const { name, value } = e.target;
+    setCurrentGame((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -38,7 +42,7 @@ const GameForm = ({ user }) => {
       number_of_players: Number(currentGame.numberOfPlayers),
       skill_level: Number(currentGame.skillLevel),
       game_type: Number(currentGame.gameTypeId),
-      user_id: user.uid,
+      uid: user.uid,
     };
 
     // Send POST request to your API
@@ -51,8 +55,33 @@ const GameForm = ({ user }) => {
         <Form.Group className="mb-3">
           <Form.Label>Title</Form.Label>
           <Form.Control name="title" required value={currentGame.title} onChange={handleChange} />
+          <Form.Label>Game Maker</Form.Label>
+          <Form.Control name="maker" required value={currentGame.maker} onChange={handleChange} />
+          <Form.Label>Number of Players</Form.Label>
+          <Form.Control name="numberOfPlayers" required value={currentGame.numberOfPlayers} onChange={handleChange} />
+          <Form.Label>Skill Level Needed for This Game</Form.Label>
+          <p>***Range between 1 to 10 with 1 being the minimum and 10 being the maxium***</p>
+          <Form.Control name="skillLevel" required value={currentGame.skillLevel} onChange={handleChange} />
         </Form.Group>
-        {/* TODO: create the rest of the input fields */}
+        <Form.Select
+          name="gameTypeId"
+          onChange={handleChange}
+          className="mb-3"
+          required
+        >
+          <option value="">Select Type of Game</option>
+          {
+              gameTypes.map((gameType) => (
+                <option
+                  key={gameType.id}
+                  value={gameType.id}
+                  // selected={obj?.gameType_id === gameType.firebaseKey}
+                >
+                  {gameType.label}
+                </option>
+              ))
+            }
+        </Form.Select>
 
         <Button variant="primary" type="submit">
           Submit
