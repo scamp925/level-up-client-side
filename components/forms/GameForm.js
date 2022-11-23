@@ -75,7 +75,6 @@ const GameForm = ({ user }) => {
                 <option
                   key={gameType.id}
                   value={gameType.id}
-                  // selected={obj?.gameType_id === gameType.firebaseKey}
                 >
                   {gameType.label}
                 </option>
