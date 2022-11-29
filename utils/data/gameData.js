@@ -34,9 +34,23 @@ const getGameTypes = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const updateGame = (gameObj) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/games/${gameObj.id}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(gameObj),
+  })
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject);
+});
+
 export {
   getGames,
   getSingleGame,
   createGame,
   getGameTypes,
+  updateGame,
 };
