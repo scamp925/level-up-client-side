@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { Button, Form } from 'react-bootstrap';
+import {
+  Button, Form, Col, Row,
+} from 'react-bootstrap';
 import { getGames } from '../../utils/data/gameData';
 import { createEvent } from '../../utils/data/eventData';
 
@@ -54,7 +56,7 @@ function EventForm({ user }) {
             className="mb-3"
             required
           >
-            <option value="">Select Game</option>
+            <option value="">Select a Game</option>
             {
                 games.map((game) => (
                   <option
@@ -66,13 +68,38 @@ function EventForm({ user }) {
                 ))
               }
           </Form.Select>
-          <Form.Label>Game Maker</Form.Label>
-          <Form.Control name="maker" required value={eventFormInput.maker} onChange={handleChange} />
-          <Form.Label>Number of Players</Form.Label>
-          <Form.Control name="numberOfPlayers" required value={eventFormInput.numberOfPlayers} onChange={handleChange} />
-          <Form.Label>Skill Level Needed for This Game</Form.Label>
-          <p>***Range between 1 to 10 with 1 being the minimum and 10 being the maxium***</p>
-          <Form.Control name="skillLevel" required value={eventFormInput.skillLevel} onChange={handleChange} />
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formGridCity">
+              <Form.Label>Date (YYYY-MM-DD)</Form.Label>
+              <Form.Control name="date" required value={eventFormInput.date} onChange={handleChange} />
+            </Form.Group>
+
+            {/* <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Time</Form.Label>
+              <Form.Select
+                name="time"
+                onChange={handleChange}
+                required
+              >
+                <option>Select a Time</option>
+                <option>...</option>
+              </Form.Select>
+            </Form.Group> */}
+
+            <Form.Group as={Col} controlId="formGridZip">
+              <Form.Label>Time (24-hour clock format)</Form.Label>
+              <Form.Control name="time" required value={eventFormInput.time} onChange={handleChange} />
+            </Form.Group>
+          </Row>
+          <Form.Label>Description of Event</Form.Label>
+          <Form.Control
+            as="textarea"
+            style={{ height: '100px' }}
+            name="description"
+            value={eventFormInput.description}
+            onChange={handleChange}
+            required
+          />
         </Form.Group>
 
         <Button variant="primary" type="submit">
