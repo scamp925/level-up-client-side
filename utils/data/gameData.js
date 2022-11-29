@@ -34,4 +34,9 @@ const getGameTypes = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-export { getGames, getSingleGame, createGame, getGameTypes };
+export {
+  getGames,
+  getSingleGame,
+  createGame,
+  getGameTypes,
+};
