@@ -22,13 +22,14 @@ function EventCard({ eventObj }) {
 
 EventCard.propTypes = {
   eventObj: PropTypes.shape({
+    id: PropTypes.number,
     game: PropTypes.shape({
       id: PropTypes.number,
       title: PropTypes.string,
       maker: PropTypes.string,
       number_of_players: PropTypes.number,
       skill_level: PropTypes.number,
-      gameType: PropTypes.shape({
+      game_type: PropTypes.shape({
         id: PropTypes.number,
         label: PropTypes.string,
       }),

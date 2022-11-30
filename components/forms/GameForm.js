@@ -4,6 +4,17 @@ import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { createGame, getGameTypes, updateGame } from '../../utils/data/gameData';
 
+const initialState = {
+  skillLevel: 1,
+  numberOfPlayers: 0,
+  title: '',
+  maker: '',
+  gameTypeId: {
+    id: 0,
+    label: '',
+  },
+};
+
 const GameForm = ({ user, gameObj }) => {
   const [gameTypes, setGameTypes] = useState([]);
   /*
@@ -11,17 +22,10 @@ const GameForm = ({ user, gameObj }) => {
   the properties of this state variable, you need to
   provide some default values.
   */
-  const [currentGame, setCurrentGame] = useState({
-    skillLevel: 1,
-    numberOfPlayers: 0,
-    title: '',
-    maker: '',
-    gameTypeId: 0,
-  });
+  const [currentGame, setCurrentGame] = useState(initialState);
   const router = useRouter();
 
   useEffect(() => {
-    getGameTypes().then((gameTypeArray) => setGameTypes(gameTypeArray));
     if (gameObj.id) {
       setCurrentGame({
         skillLevel: gameObj.skill_level,
@@ -31,6 +35,7 @@ const GameForm = ({ user, gameObj }) => {
         gameTypeId: gameObj.game_type,
       });
     }
+    getGameTypes().then(setGameTypes);
   }, [gameObj, user]);
 
   const handleChange = (e) => {
@@ -44,21 +49,17 @@ const GameForm = ({ user, gameObj }) => {
   const handleSubmit = (e) => {
     // Prevent form from being submitted
     e.preventDefault();
-
-    if (gameObj?.id) {
-      updateGame(currentGame)
-        .then(() => router.push('/games'));
+    const game = {
+      maker: currentGame.maker,
+      title: currentGame.title,
+      number_of_players: Number(currentGame.numberOfPlayers),
+      skill_level: Number(currentGame.skillLevel),
+      game_type: currentGame.gameTypeId.id,
+      user_id: user.uid,
+    };
+    if (gameObj.id) {
+      updateGame(game, gameObj.id).then(() => router.push('/games'));
     } else {
-      const game = {
-        maker: currentGame.maker,
-        title: currentGame.title,
-        number_of_players: Number(currentGame.numberOfPlayers),
-        skill_level: Number(currentGame.skillLevel),
-        game_type: Number(currentGame.gameTypeId),
-        uid: user.uid,
-      };
-
-      // Send POST request to your API
       createGame(game).then(() => router.push('/games'));
     }
   };
@@ -77,24 +78,29 @@ const GameForm = ({ user, gameObj }) => {
           <p>***Range between 1 to 10 with 1 being the minimum and 10 being the maxium***</p>
           <Form.Control name="skillLevel" required value={currentGame.skillLevel} onChange={handleChange} />
         </Form.Group>
-        <Form.Select
-          name="gameTypeId"
-          onChange={handleChange}
-          className="mb-3"
-          required
-        >
-          <option value="">Select Type of Game</option>
-          {
-              gameTypes.map((gameType) => (
-                <option
-                  key={gameType.id}
-                  value={gameType.id}
-                >
-                  {gameType.label}
-                </option>
-              ))
-            }
-        </Form.Select>
+        <Form.Group className="mb-3">
+          <Form.Label>Game Type</Form.Label>
+          <Form.Select
+            name="gameTypeId"
+            onChange={handleChange}
+            className="mb-3"
+            value={currentGame.gameTypeId?.id}
+            required
+          >
+            <option value="">Select Game Type</option>
+            {
+            gameTypes.map((gameType) => (
+              <option
+                defaultValue={gameType.id === currentGame.gameTypeId}
+                key={gameType.id}
+                value={gameType.id}
+              >
+                {gameType.label}
+              </option>
+            ))
+          }
+          </Form.Select>
+        </Form.Group>
 
         <Button variant="primary" type="submit">
           Submit
@@ -109,13 +115,20 @@ GameForm.propTypes = {
     uid: PropTypes.string.isRequired,
   }).isRequired,
   gameObj: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     skill_level: PropTypes.number,
     number_of_players: PropTypes.number,
     title: PropTypes.string,
     maker: PropTypes.string,
-    game_type: PropTypes.string,
-  }).isRequired,
+    game_type: PropTypes.shape({
+      id: PropTypes.number,
+      label: PropTypes.string,
+    }),
+  }),
+};
+
+GameForm.defaultProps = {
+  gameObj: {},
 };
 
 export default GameForm;
