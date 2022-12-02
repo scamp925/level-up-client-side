@@ -65,6 +65,7 @@ function EventForm({ user, eventObj }) {
             name="game"
             onChange={handleChange}
             className="mb-3"
+            value={eventFormInput.game?.id}
             required
           >
             <option value="">Select a Game</option>
@@ -142,7 +143,11 @@ EventForm.propTypes = {
     description: PropTypes.string,
     date: PropTypes.string,
     time: PropTypes.string,
-    organizer: PropTypes.string,
+    organizer: PropTypes.shape({
+      id: PropTypes.number,
+      bio: PropTypes.string,
+      uid: PropTypes.string,
+    }),
   }),
 };
 
