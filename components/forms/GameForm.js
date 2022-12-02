@@ -103,7 +103,7 @@ const GameForm = ({ user, gameObj }) => {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          Submit
+          {gameObj?.id ? 'Update' : 'Submit'}
         </Button>
       </Form>
     </>
