@@ -49,17 +49,25 @@ const GameForm = ({ user, gameObj }) => {
   const handleSubmit = (e) => {
     // Prevent form from being submitted
     e.preventDefault();
-    const game = {
-      maker: currentGame.maker,
-      title: currentGame.title,
-      number_of_players: Number(currentGame.numberOfPlayers),
-      skill_level: Number(currentGame.skillLevel),
-      game_type: currentGame.gameTypeId.id,
-      user_id: user.uid,
-    };
     if (gameObj.id) {
+      const game = {
+        maker: currentGame.maker,
+        title: currentGame.title,
+        number_of_players: Number(currentGame.numberOfPlayers),
+        skill_level: Number(currentGame.skillLevel),
+        game_type: Number(currentGame.gameTypeId.id),
+        uid: user.uid,
+      };
       updateGame(game, gameObj.id).then(() => router.push('/games'));
     } else {
+      const game = {
+        maker: currentGame.maker,
+        title: currentGame.title,
+        number_of_players: Number(currentGame.numberOfPlayers),
+        skill_level: Number(currentGame.skillLevel),
+        game_type: Number(currentGame.gameTypeId),
+        uid: user.uid,
+      };
       createGame(game).then(() => router.push('/games'));
     }
   };
