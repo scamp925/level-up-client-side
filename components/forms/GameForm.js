@@ -26,6 +26,8 @@ const GameForm = ({ user, gameObj }) => {
   const router = useRouter();
 
   useEffect(() => {
+    getGameTypes().then(setGameTypes);
+
     if (gameObj.id) {
       setCurrentGame({
         skillLevel: gameObj.skill_level,
@@ -35,7 +37,6 @@ const GameForm = ({ user, gameObj }) => {
         gameTypeId: gameObj.game_type,
       });
     }
-    getGameTypes().then(setGameTypes);
   }, [gameObj, user]);
 
   const handleChange = (e) => {
