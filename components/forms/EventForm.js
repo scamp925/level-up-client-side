@@ -41,17 +41,23 @@ function EventForm({ user, eventObj }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const event = {
-      game: eventFormInput.game.id,
-      description: eventFormInput.description,
-      date: eventFormInput.date,
-      time: eventFormInput.time,
-      organizer: user.uid,
-    };
-
     if (eventObj.id) {
+      const event = {
+        game: Number(eventFormInput.game.id),
+        description: eventFormInput.description,
+        date: eventFormInput.date,
+        time: eventFormInput.time,
+        organizer: user.uid,
+      };
       updateEvent(event, eventObj.id).then(() => router.push('/events'));
     } else {
+      const event = {
+        game: eventFormInput.game,
+        description: eventFormInput.description,
+        date: eventFormInput.date,
+        time: eventFormInput.time,
+        organizer: user.uid,
+      };
       createEvent(event).then(() => router.push('/events'));
     }
   };
