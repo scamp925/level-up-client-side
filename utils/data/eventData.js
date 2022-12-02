@@ -7,6 +7,13 @@ const getEvents = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getSingleEvent = (id) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events/${id}`)
+    .then((response) => response.json())
+    .then(resolve)
+    .catch(reject);
+});
+
 const createEvent = (newEvent) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/events`, {
     method: 'POST',
@@ -20,4 +27,21 @@ const createEvent = (newEvent) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-export { getEvents, createEvent };
+const updateEvent = (data, id) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events/${id}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => resolve(response))
+    .catch(reject);
+});
+
+export {
+  getEvents,
+  getSingleEvent,
+  createEvent,
+  updateEvent,
+};

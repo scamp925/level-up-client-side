@@ -5,9 +5,9 @@ import {
   Button, Form, Col, Row,
 } from 'react-bootstrap';
 import { getGames } from '../../utils/data/gameData';
-import { createEvent } from '../../utils/data/eventData';
+import { createEvent, updateEvent } from '../../utils/data/eventData';
 
-function EventForm({ user }) {
+function EventForm({ user, eventObj }) {
   const [eventFormInput, setEventFormInput] = useState({
     game: '',
     description: '',
@@ -19,8 +19,16 @@ function EventForm({ user }) {
   const router = useRouter();
 
   useEffect(() => {
+    if (eventObj.id) {
+      setEventFormInput({
+        game: eventObj.game,
+        description: eventObj.description,
+        date: eventObj.date,
+        time: eventObj.time,
+      });
+    }
     getGames().then((gameArray) => setGames(gameArray));
-  }, []);
+  }, [eventObj]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,15 +42,18 @@ function EventForm({ user }) {
     e.preventDefault();
 
     const event = {
-      game: Number(eventFormInput.game),
+      game: eventFormInput.game.id,
       description: eventFormInput.description,
       date: eventFormInput.date,
       time: eventFormInput.time,
       organizer: user.uid,
     };
-    console.warn(user);
 
-    createEvent(event).then(() => router.push('/events'));
+    if (eventObj.id) {
+      updateEvent(event, eventObj.id).then(() => router.push('/events'));
+    } else {
+      createEvent(event).then(() => router.push('/events'));
+    }
   };
 
   return (
@@ -54,12 +65,14 @@ function EventForm({ user }) {
             name="game"
             onChange={handleChange}
             className="mb-3"
+            value={eventFormInput.game?.id}
             required
           >
             <option value="">Select a Game</option>
             {
                 games.map((game) => (
                   <option
+                    defaultValue={game.id === eventFormInput.game}
                     key={game.id}
                     value={game.id}
                   >
@@ -114,6 +127,32 @@ EventForm.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
+  eventObj: PropTypes.shape({
+    id: PropTypes.number,
+    game: PropTypes.shape({
+      id: PropTypes.number,
+      skill_level: PropTypes.number,
+      number_of_players: PropTypes.number,
+      title: PropTypes.string,
+      maker: PropTypes.string,
+      game_type: PropTypes.shape({
+        id: PropTypes.number,
+        label: PropTypes.string,
+      }),
+    }),
+    description: PropTypes.string,
+    date: PropTypes.string,
+    time: PropTypes.string,
+    organizer: PropTypes.shape({
+      id: PropTypes.number,
+      bio: PropTypes.string,
+      uid: PropTypes.string,
+    }),
+  }),
+};
+
+EventForm.defaultProps = {
+  eventObj: {},
 };
 
 export default EventForm;

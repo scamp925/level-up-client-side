@@ -1,28 +1,35 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 
-const GameCard = ({
-  title, //
-  maker,
-  numberOfPlayers,
-  skillLevel,
-}) => (
+const GameCard = ({ gameObj }) => (
   <Card className="text-center">
-    <Card.Header>{title}</Card.Header>
     <Card.Body>
-      <Card.Title>By: {maker}</Card.Title>
-      <Card.Text>{numberOfPlayers} players needed</Card.Text>
+      <Card.Title>{gameObj.title}</Card.Title>
+      <Card.Text>By: {gameObj.maker}</Card.Text>
+      <Card.Text>Skill Level: {gameObj.skillLevel}</Card.Text>
+      <Card.Text>{gameObj.numberOfPlayers} players needed</Card.Text>
     </Card.Body>
-    <Card.Footer className="text-muted">Skill Level: {skillLevel}</Card.Footer>
+    <Card.Footer className="text-muted">
+      <Button variant="link" href={`/games/edit/${gameObj.id}`}>Edit</Button>
+      <Button variant="link">Delete</Button>
+    </Card.Footer>
   </Card>
 );
 
 GameCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  maker: PropTypes.string.isRequired,
-  numberOfPlayers: PropTypes.number.isRequired,
-  skillLevel: PropTypes.number.isRequired,
+  gameObj: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    maker: PropTypes.string,
+    numberOfPlayers: PropTypes.number,
+    skillLevel: PropTypes.number,
+    gamer: PropTypes.shape({
+      id: PropTypes.number,
+      bio: PropTypes.string,
+      uid: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default GameCard;
