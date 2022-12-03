@@ -1,10 +1,21 @@
+import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Card, ListGroup, Button } from 'react-bootstrap';
 import { useAuth } from '../../utils/context/authContext';
+import { deleteEvent } from '../../utils/data/eventData';
 
-function EventCard({ eventObj }) {
+function EventCard({ eventObj, onUpdate }) {
   const { user } = useAuth();
+  const router = useRouter();
+
+  const deleteThisEvent = () => {
+    if (window.confirm('Heads up! You are about to permanently delete this event. Click "OK" if you wish to continue.')) {
+      deleteEvent(eventObj.id).then(() => onUpdate()).then(() => {
+        router.push('/events');
+      });
+    }
+  };
 
   return (
     <Card style={{ width: '18rem' }}>
@@ -18,7 +29,7 @@ function EventCard({ eventObj }) {
       </ListGroup>
       <Card.Footer className="text-muted text-center">
         <Button variant="link" href={`/events/edit/${eventObj.id}`}>Edit</Button>
-        <Button variant="link">Delete</Button>
+        <Button variant="link" onClick={deleteThisEvent}>Delete</Button>
       </Card.Footer>
     </Card>
   );
@@ -47,6 +58,7 @@ EventCard.propTypes = {
       bio: PropTypes.string,
     }),
   }).isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default EventCard;
