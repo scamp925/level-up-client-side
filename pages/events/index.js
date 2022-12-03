@@ -30,7 +30,7 @@ export default function ViewAllEvents() {
       </Button>
       {events.map(((event) => (
         <section key={`event--${event.id}`} className="event">
-          <EventCard eventObj={event} onUpdate={getAllEvents} />
+          <EventCard id={event.id} game={event.game} description={event.description} date={event.date} time={event.time} organizer={event.organizer} onUpdate={getAllEvents} />
         </section>
       )))}
     </article>

@@ -5,11 +5,11 @@ import { Card, Button } from 'react-bootstrap';
 import { deleteGame } from '../../utils/data/gameData';
 
 function GameCard({
-  title, //
+  id, //
+  title,
   maker,
   numberOfPlayers,
   skillLevel,
-  id,
   onUpdate,
 }) {
   const router = useRouter();
