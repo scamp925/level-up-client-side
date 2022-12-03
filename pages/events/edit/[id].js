@@ -12,7 +12,7 @@ export default function EditEvent() {
 
   useEffect(() => {
     getSingleEvent(id).then(setEditEvent);
-  }, [id]);
+  }, [user, id]);
 
   return (
     <div>

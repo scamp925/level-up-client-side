@@ -107,7 +107,7 @@ GameForm.propTypes = {
     numberOfPlayers: PropTypes.number,
     title: PropTypes.string,
     maker: PropTypes.string,
-    gameType: PropTypes.shape({
+    gameTypeId: PropTypes.shape({
       id: PropTypes.number,
       label: PropTypes.string,
     }),
