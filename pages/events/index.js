@@ -8,10 +8,14 @@ export default function ViewAllEvents() {
   const [events, setEvents] = useState([]);
   const router = useRouter();
 
-  useEffect(() => {
+  const getAllEvents = () => {
     getEvents().then((eventsArray) => {
       setEvents(eventsArray);
     });
+  };
+
+  useEffect(() => {
+    getAllEvents();
   }, []);
 
   return (
@@ -26,7 +30,7 @@ export default function ViewAllEvents() {
       </Button>
       {events.map(((event) => (
         <section key={`event--${event.id}`} className="event">
-          <EventCard eventObj={event} />
+          <EventCard eventObj={event} onUpdate={getAllEvents} />
         </section>
       )))}
     </article>

@@ -122,7 +122,7 @@ function EventForm({ user, eventObj }) {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          Submit
+          {eventObj?.id ? 'Update' : 'Submit'}
         </Button>
       </Form>
     </>
