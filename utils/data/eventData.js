@@ -10,30 +10,52 @@ const getEvents = () => new Promise((resolve, reject) => {
 const getSingleEvent = (id) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/events/${id}`)
     .then((response) => response.json())
-    .then(resolve)
+    .then((data) => {
+      resolve({
+        id: data.id,
+        game: data.game,
+        description: data.description,
+        date: data.date,
+        time: data.time,
+      });
+    })
     .catch(reject);
 });
 
-const createEvent = (newEvent) => new Promise((resolve, reject) => {
+const createEvent = (user, newEvent) => new Promise((resolve, reject) => {
+  const eventObj = {
+    game: Number(newEvent.game.id),
+    description: newEvent.description,
+    date: newEvent.date,
+    time: newEvent.time,
+    organizer: user.uid,
+  };
   fetch(`${clientCredentials.databaseURL}/events`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify(newEvent),
+    body: JSON.stringify(eventObj),
   })
     .then((response) => response.json())
     .then(resolve)
     .catch(reject);
 });
 
-const updateEvent = (data, id) => new Promise((resolve, reject) => {
+const updateEvent = (user, event, id) => new Promise((resolve, reject) => {
+  const eventObj = {
+    game: Number(event.game.id),
+    description: event.description,
+    date: event.date,
+    time: event.time,
+    organizer: user.uid,
+  };
   fetch(`${clientCredentials.databaseURL}/events/${id}`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(eventObj),
   })
     .then((response) => resolve(response))
     .catch(reject);

@@ -19,16 +19,12 @@ function EventForm({ user, eventObj }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (eventObj.id) {
-      setEventFormInput({
-        game: eventObj.game,
-        description: eventObj.description,
-        date: eventObj.date,
-        time: eventObj.time,
-      });
-    }
     getGames().then((gameArray) => setGames(gameArray));
-  }, [eventObj]);
+
+    if (eventObj.id) {
+      setEventFormInput(eventObj);
+    }
+  }, [eventObj, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,23 +38,9 @@ function EventForm({ user, eventObj }) {
     e.preventDefault();
 
     if (eventObj.id) {
-      const event = {
-        game: Number(eventFormInput.game.id),
-        description: eventFormInput.description,
-        date: eventFormInput.date,
-        time: eventFormInput.time,
-        organizer: user.uid,
-      };
-      updateEvent(event, eventObj.id).then(() => router.push('/events'));
+      updateEvent(user, eventFormInput, eventObj.id).then(() => router.push('/events'));
     } else {
-      const event = {
-        game: eventFormInput.game,
-        description: eventFormInput.description,
-        date: eventFormInput.date,
-        time: eventFormInput.time,
-        organizer: user.uid,
-      };
-      createEvent(event).then(() => router.push('/events'));
+      createEvent(user, eventFormInput).then(() => router.push('/events'));
     }
   };
 
@@ -137,11 +119,11 @@ EventForm.propTypes = {
     id: PropTypes.number,
     game: PropTypes.shape({
       id: PropTypes.number,
-      skill_level: PropTypes.number,
-      number_of_players: PropTypes.number,
+      skillLevel: PropTypes.number,
+      numberOfPlayers: PropTypes.number,
       title: PropTypes.string,
       maker: PropTypes.string,
-      game_type: PropTypes.shape({
+      gameTypeId: PropTypes.shape({
         id: PropTypes.number,
         label: PropTypes.string,
       }),

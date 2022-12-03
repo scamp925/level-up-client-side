@@ -29,13 +29,7 @@ const GameForm = ({ user, gameObj }) => {
     getGameTypes().then(setGameTypes);
 
     if (gameObj.id) {
-      setCurrentGame({
-        skillLevel: gameObj.skill_level,
-        numberOfPlayers: gameObj.number_of_players,
-        title: gameObj.title,
-        maker: gameObj.maker,
-        gameTypeId: gameObj.game_type,
-      });
+      setCurrentGame(gameObj);
     }
   }, [gameObj, user]);
 
@@ -51,25 +45,9 @@ const GameForm = ({ user, gameObj }) => {
     // Prevent form from being submitted
     e.preventDefault();
     if (gameObj.id) {
-      const game = {
-        maker: currentGame.maker,
-        title: currentGame.title,
-        number_of_players: Number(currentGame.numberOfPlayers),
-        skill_level: Number(currentGame.skillLevel),
-        game_type: Number(currentGame.gameTypeId.id),
-        uid: user.uid,
-      };
-      updateGame(game, gameObj.id).then(() => router.push('/games'));
+      updateGame(user, currentGame, gameObj.id).then(() => router.push('/games'));
     } else {
-      const game = {
-        maker: currentGame.maker,
-        title: currentGame.title,
-        number_of_players: Number(currentGame.numberOfPlayers),
-        skill_level: Number(currentGame.skillLevel),
-        game_type: Number(currentGame.gameTypeId),
-        uid: user.uid,
-      };
-      createGame(game).then(() => router.push('/games'));
+      createGame(user, currentGame).then(() => router.push('/games'));
     }
   };
 
@@ -125,11 +103,11 @@ GameForm.propTypes = {
   }).isRequired,
   gameObj: PropTypes.shape({
     id: PropTypes.number,
-    skill_level: PropTypes.number,
-    number_of_players: PropTypes.number,
+    skilLevel: PropTypes.number,
+    numberOfPlayers: PropTypes.number,
     title: PropTypes.string,
     maker: PropTypes.string,
-    game_type: PropTypes.shape({
+    gameTypeId: PropTypes.shape({
       id: PropTypes.number,
       label: PropTypes.string,
     }),
