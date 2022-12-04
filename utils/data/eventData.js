@@ -1,7 +1,12 @@
 import { clientCredentials } from '../client';
 
-const getEvents = () => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/events`)
+const getEvents = (uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events`, {
+    headers: {
+      Authorization: uid,
+      'content-type': 'application/json',
+    },
+  })
     .then((response) => response.json())
     .then(resolve)
     .catch(reject);
@@ -76,6 +81,7 @@ const joinEvent = (eventId, uid) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/events/${eventId}/signup`, {
     method: 'POST',
     headers: {
+      Authorization: uid,
       'content-type': 'application/json',
     },
     body: JSON.stringify({ uid }),
@@ -85,9 +91,10 @@ const joinEvent = (eventId, uid) => new Promise((resolve, reject) => {
 });
 
 const leaveEvent = (eventId, uid) => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/events/${eventId}/signup`, {
+  fetch(`${clientCredentials.databaseURL}/events/${eventId}/leave`, {
     method: 'DELETE',
     headers: {
+      Authorization: uid,
       'content-type': 'application/json',
     },
     body: JSON.stringify({ uid }),

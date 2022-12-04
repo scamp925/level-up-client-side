@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Card, ListGroup, Button } from 'react-bootstrap';
 import { useAuth } from '../../utils/context/authContext';
-import { deleteEvent } from '../../utils/data/eventData';
+import { deleteEvent, joinEvent, leaveEvent } from '../../utils/data/eventData';
 
 function EventCard({
   id,
@@ -13,6 +13,7 @@ function EventCard({
   time,
   organizer,
   onUpdate,
+  joined,
 }) {
   const { user } = useAuth();
   const router = useRouter();
@@ -23,6 +24,14 @@ function EventCard({
         router.push('/events');
       });
     }
+  };
+
+  const joinThisEvent = () => {
+    joinEvent(id, user.uid).then(() => onUpdate());
+  };
+
+  const leaveThisEvent = () => {
+    leaveEvent(id, user.uid).then(() => onUpdate());
   };
 
   return (
@@ -36,6 +45,7 @@ function EventCard({
         <ListGroup.Item><b>Organized by:</b> {organizer?.uid === user.fbUser.uid ? user.fbUser.displayName : ''}</ListGroup.Item>
       </ListGroup>
       <Card.Footer className="text-muted text-center">
+        { joined ? <Button variant="danger" onClick={leaveThisEvent}>Leave</Button> : <Button variant="success" onClick={joinThisEvent}>Join</Button> }
         <Button variant="link" href={`/events/edit/${id}`}>Edit</Button>
         <Button variant="link" onClick={deleteThisEvent}>Delete</Button>
       </Card.Footer>
@@ -65,6 +75,7 @@ EventCard.propTypes = {
     bio: PropTypes.string,
   }).isRequired,
   onUpdate: PropTypes.func.isRequired,
+  joined: PropTypes.bool.isRequired,
 };
 
 export default EventCard;
