@@ -72,10 +72,36 @@ const deleteEvent = (id) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const joinEvent = (eventId, uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events/${eventId}/signup`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ uid }),
+  })
+    .then(resolve)
+    .catch(reject);
+});
+
+const leaveEvent = (eventId, uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/events/${eventId}/signup`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ uid }),
+  })
+    .then(resolve)
+    .catch(reject);
+});
+
 export {
   getEvents,
   getSingleEvent,
   createEvent,
   updateEvent,
   deleteEvent,
+  joinEvent,
+  leaveEvent,
 };
