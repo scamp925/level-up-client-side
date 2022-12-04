@@ -1,15 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'react-bootstrap';
 import { getEvents } from '../../utils/data/eventData';
 import EventCard from '../../components/cards/EventCard';
+import { useAuth } from '../../utils/context/authContext';
 
 export default function ViewAllEvents() {
   const [events, setEvents] = useState([]);
   const router = useRouter();
+  const { user } = useAuth();
 
   const getAllEvents = () => {
-    getEvents().then((eventsArray) => {
+    getEvents(user.uid).then((eventsArray) => {
       setEvents(eventsArray);
     });
   };
