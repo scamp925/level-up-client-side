@@ -74,19 +74,6 @@ function EventForm({ user, eventObj }) {
               <Form.Label>Date (YYYY-MM-DD)</Form.Label>
               <Form.Control name="date" required value={eventFormInput.date} onChange={handleChange} />
             </Form.Group>
-
-            {/* <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>Time</Form.Label>
-              <Form.Select
-                name="time"
-                onChange={handleChange}
-                required
-              >
-                <option>Select a Time</option>
-                <option>...</option>
-              </Form.Select>
-            </Form.Group> */}
-
             <Form.Group as={Col} controlId="formGridZip">
               <Form.Label>Time (24-hour clock format)</Form.Label>
               <Form.Control name="time" required value={eventFormInput.time} onChange={handleChange} />
