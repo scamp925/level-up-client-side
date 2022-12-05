@@ -18,6 +18,9 @@ function EventCard({
   const { user } = useAuth();
   const router = useRouter();
 
+  const [year, month, day] = date.split('-');
+  const newDateFormat = [month, day, year].join('/');
+
   const deleteThisEvent = () => {
     if (window.confirm('Heads up! You are about to permanently delete this event. Click "OK" if you wish to continue.')) {
       deleteEvent(id).then(() => onUpdate()).then(() => {
@@ -41,7 +44,7 @@ function EventCard({
       </Card.Body>
       <ListGroup className="list-group-flush">
         <ListGroup.Item><b>Description of Event:</b> {description}</ListGroup.Item>
-        <ListGroup.Item><b>Happening:</b> {date} at {time}</ListGroup.Item>
+        <ListGroup.Item><b>Happening:</b> {newDateFormat} at {time}</ListGroup.Item>
         <ListGroup.Item><b>Organized by:</b> {organizer?.uid === user.fbUser.uid ? user.fbUser.displayName : ''}</ListGroup.Item>
       </ListGroup>
       <Card.Footer className="text-muted text-center">
